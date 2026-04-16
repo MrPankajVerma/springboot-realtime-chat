@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pankaj.chatapp.dto.LoginRequest;
 import com.pankaj.chatapp.entity.User;
 import com.pankaj.chatapp.service.UserService;
 
@@ -21,5 +22,10 @@ public class AuthController {
 	@PostMapping("/register")
 	public User register(@RequestBody User user) {
 		return userService.register(user);
+	}
+	
+	@PostMapping("/login")
+	public User login(@RequestBody LoginRequest request) {
+		return userService.login(request.getEmail(), request.getPassword());
 	}
 }
