@@ -9,11 +9,15 @@ import org.springframework.stereotype.Service;
 import com.pankaj.chatapp.entity.Status;
 import com.pankaj.chatapp.entity.User;
 import com.pankaj.chatapp.repository.UserRepository;
+import com.pankaj.chatapp.security.JwtService;
 
 @Service
 public class UserService {
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private JwtService jwtService;
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -24,7 +28,7 @@ public class UserService {
 		return userRepository.save(user);
 	}
 	
-	public User login(String email, String password) {
+	public String login(String email, String password) {
 		Optional<User> userOptional = userRepository.findByEmail(email);
 		
 		User user = userOptional.orElseThrow(() -> new RuntimeException("User not found!"));
@@ -35,6 +39,7 @@ public class UserService {
 		
 		user.setStatus(Status.ONLINE);
 		
-		return userRepository.save(user);
+		userRepository.save(user);
+		return jwtService.generateToken(user.getEmail());
 	}
 }
