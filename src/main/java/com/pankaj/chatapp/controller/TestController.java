@@ -1,5 +1,6 @@
 package com.pankaj.chatapp.controller;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -7,6 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
 	@GetMapping("/api/test")
 	public String test() {
-		return "Protected API working!";
+		String email = (String) SecurityContextHolder
+				.getContext()
+				.getAuthentication()
+				.getPrincipal();
+		return "Hello "+email+", Protected API working!";
 	}
 }
